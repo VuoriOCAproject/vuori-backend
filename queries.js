@@ -80,7 +80,7 @@ function getCustomerColumns(req, res, next) {
                 .json({
                     status: 'success',
                     message: 'Retrieved ALL products',
-                    data: data
+                    data: data.map(c => c.column_name)
 
                 });
         });
