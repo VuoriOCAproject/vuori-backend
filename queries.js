@@ -8,6 +8,7 @@ var options = {
 var pgp = require('pg-promise')(options);
 var connectionString = 'postgres://postgres@localhost:5432/testdb';
 var db = pgp(connectionString);
+var _ = require('lodash');
 
 // add query functions
 
@@ -85,10 +86,88 @@ function getCustomerColumns(req, res, next) {
                 });
         });
 }
+
+function getOrderColumns(req, res, next) {
+    db.any(`select * from information_schema.columns where table_schema='tests' and table_name='order'`)
+        .then(function(data) {
+            res.status(200)
+                .json({
+                    status: 'success',
+                    message: 'Retrieved ALL orders',
+                    data: data.map(c => c.column_name)
+
+                });
+        });
+}
+
+function getOrderLineItemColumns(req, res, next) {
+    db.any(`select * from information_schema.columns where table_schema='tests' and table_name='orderlineitem'`)
+        .then(function(data) {
+            res.status(200)
+                .json({
+                    status: 'success',
+                    message: 'Retrieved ALL OrderLineItems',
+                    data: data.map(c => c.column_name)
+
+                });
+        });
+}
+
+function getProductColumns(req, res, next) {
+    db.any(`select * from information_schema.columns where table_schema='tests' and table_name='product'`)
+        .then(function(data) {
+            res.status(200)
+                .json({
+                    status: 'success',
+                    message: 'Retrieved ALL product columns',
+                    data: data.map(c => c.column_name)
+
+                });
+        });
+}
+
+function getTables(req, res, next) {
+    db.any(`select table_name from information_schema.tables where table_schema='tests'`)
+        .then(function(data) {
+            res.status(200)
+            .json({
+                status:'Yaahooo!',
+                message: 'Retrieved ALL table names',
+                data: data
+            });
+        });
+}
+
+function getSchema(req, res, next) {
+    db.any(`select * from information_schema.columns where table_schema='tests'`)
+      .then((data) => {
+
+        let uniqueNames = _.uniq(data.map(r => r.table_name));
+
+        res.json(uniqueNames.map(name => {
+            return {
+                tableName: name,
+                columns: data
+                    .filter(d => d.table_name === name)
+                    .map(d => d.column_name)
+            };
+        }));
+
+
+
+      })
+
+}
+
 module.exports = {
     getCustomers: getCustomers,
     getOrderLineItems: getOrderLineItems,
     getOrders: getOrders,
     getProducts: getProducts,
-    getCustomerColumns: getCustomerColumns
+    getCustomerColumns: getCustomerColumns,
+    getOrderColumns: getOrderColumns,
+    getOrderLineItemColumns: getOrderLineItemColumns,
+    getProductColumns: getProductColumns,
+    getTables: getTables,
+    getSchema: getSchema
 };
