@@ -13,6 +13,7 @@ router.get('/api/orders/columns', db.getOrderColumns);
 router.get('/api/orderlineitems/columns', db.getOrderLineItemColumns);
 router.get('/api/products/columns', db.getProductColumns);
 router.get('/api/schema', db.getSchema);
+router.post('/api/query', db.sendQuery);
 
 
 
