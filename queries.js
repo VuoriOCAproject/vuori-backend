@@ -8,9 +8,21 @@ var options = {
 var pgp = require('pg-promise')(options);
 var connectionString = 'postgres://postgres@localhost:5432/testdb';
 var db = pgp(connectionString);
-var _ = require('lodash');
+var _ = require('lodash'); 
 
 // add query functions
+
+function sendQuery(req, res, next) {
+    db
+        .any(req.body.query)
+        .then(function(data) {
+            res.status(200)
+                .json({
+                    data: data,
+                    message: "query executed"
+                });
+    })
+}
 
 function getCustomers(req, res, next) {
     db
@@ -169,5 +181,6 @@ module.exports = {
     getOrderLineItemColumns: getOrderLineItemColumns,
     getProductColumns: getProductColumns,
     getTables: getTables,
-    getSchema: getSchema
+    getSchema: getSchema,
+    sendQuery: sendQuery
 };
