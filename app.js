@@ -11,6 +11,7 @@ var bodyParser = require('body-parser');
 var passport = require('passport');
 var passportJWT = require('passport-jwt');
 var jwt = require('jsonwebtoken');
+var _ = require('lodash');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -21,7 +22,7 @@ var JwtStrategy = passportJWT.Strategy;
 
 var usersDb = [{
     id: 1,
-    name: process.env.USERNAME,
+    username: process.env.USERNAME,
     password: process.env.PASSWORD
 }];
 
@@ -30,14 +31,7 @@ var jwtOptions = {
     secretOrKey: process.env.JWT_SECRET
 };
 var strategy = new JwtStrategy(jwtOptions, function(jwt_payload, next) {
-    var user = null;
-
-    for (var i = 0; i < usersDb.length; i++) {
-        if (usersDb[i].id === jwt_payload.id) {
-            user = usersDb[i];
-            break;
-        }
-    }
+    var user = usersDb[_.findIndex(usersDb, { id: jwt_payload.id })];
 
     if (user) {
         next(null, user);
