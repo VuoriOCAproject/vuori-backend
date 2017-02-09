@@ -5,8 +5,8 @@ var _ = require('lodash');
 
 var usersDb = [{
     id: 1,
-    username: process.env.USERNAME,
-    password: process.env.PASSWORD
+    username: process.env.VUORI_USERNAME,
+    password: process.env.VUORI_PASSWORD
 }];
 
 /* GET users listing. */
