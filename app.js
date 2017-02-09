@@ -22,8 +22,8 @@ var JwtStrategy = passportJWT.Strategy;
 
 var usersDb = [{
     id: 1,
-    username: process.env.USERNAME,
-    password: process.env.PASSWORD
+    username: process.env.VUORI_USERNAME,
+    password: process.env.VUORI_PASSWORD
 }];
 
 var jwtOptions = {
